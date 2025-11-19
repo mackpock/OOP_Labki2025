@@ -1,0 +1,229 @@
+﻿@page
+@model WebApplication1.Pages.IndexModel
+@{
+    ViewData["Title"] = "Космические мемы";
+}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3rem;
+            text-shadow: 0 0 10px #00bfff, 0 0 20px #00bfff;
+            margin-bottom: 30px;
+        }
+
+        .input-container {
+            margin-bottom: 40px;
+        }
+
+        #categoryInput {
+            width: 300px;
+            padding: 12px;
+            font-size: 1.2rem;
+            font-family: 'Orbitron', sans-serif;
+            border: 2px solid #00bfff;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            outline: none;
+        }
+
+            #categoryInput:focus {
+                border-color: #00ffff;
+                box-shadow: 0 0 10px #00ffff;
+            }
+
+        button {
+            padding: 12px 24px;
+            font-size: 1.2rem;
+            font-family: 'Orbitron', sans-serif;
+            background: #00bfff;
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+            button:hover {
+                background: #00ffff;
+                box-shadow: 0 0 15px #00ffff;
+            }
+
+        #result {
+            margin-top: 40px;
+        }
+
+            #result img {
+                max-width: 100%;
+                max-height: 500px;
+                border: 3px solid #00bfff;
+                border-radius: 10px;
+                box-shadow: 0 0 20px rgba(0, 191, 255, 0.7);
+            }
+
+        .category-buttons {
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .category-btn {
+            background: rgba(0, 255, 255, 0.1);
+            color: #00ffff;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            border: 1px solid #00bfff;
+        }
+
+            .category-btn:hover {
+                background: rgba(0, 255, 255, 0.2);
+                box-shadow: 0 0 8px #00ffff;
+            }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <h1>🚀 😜Космические мемы😜 🛸</h1>
+
+    <div class="input-container">
+        <input type="text" id="categoryInput" placeholder="Введите категорию..." />
+        <br />
+        <!-- Кнопка "Показать мем" -->
+        <button onclick="searchMeme()">Показать мем</button>
+
+        <!-- Подсказка -->
+        <div class="hint-text">
+            Если вам лень вводить то нажмите кнопку снизу 😉
+        </div>
+
+        <!-- Кликабельные категории -->
+        <div class="category-buttons">
+            <span class="category-btn" onclick="setCategory('Рабочие мемы')">Рабочие мемы</span>
+            <span class="category-btn" onclick="setCategory('Научные мемы')">Научные мемы</span>
+            <span class="category-btn" onclick="setCategory('Мемы про жизнь')">Мемы про жизнь</span>
+            <span class="category-btn" onclick="setCategory('Рандом мем')">Рандом мем</span>
+        </div>
+
+
+    <div id="result">
+        <!-- Изображение появится здесь -->
+    </div>
+
+    @Html.AntiForgeryToken()
+
+    <script>
+        function setCategory(category) {
+            document.getElementById('categoryInput').value = category;
+        }
+
+        document.getElementById('categoryInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                searchMeme();
+            }
+        });
+
+        function searchMeme() {
+            const category = document.getElementById('categoryInput').value.trim();
+
+            if (!category) {
+                alert('Пожалуйста, введите категорию.');
+                return;
+            }
+
+            fetch('/?handler=Search', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                },
+                body: JSON.stringify({ category: category })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const resultDiv = document.getElementById('result');
+                if (data.imagePath) {
+                    resultDiv.innerHTML = `<img src="${data.imagePath}" alt="Мем из категории: ${category}" />`;
+                } else {
+                    resultDiv.innerHTML = '<p>❌ Мем не найден. Проверьте название или добавьте картинки в папку.</p>';
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Произошла ошибка при загрузке мема.');
+            });
+        }
+    </script>
+
+    <!-- Киберпанк-часы (только цифровые) -->
+    <div id="cyberClock" class="cyber-clock">
+        <div class="digital-time">00:00:00</div>
+    </div>
+
+    <style>
+            .cyber-clock {
+                font-family: 'Orbitron', sans-serif;
+                color: #00ffff;
+                text-shadow: 0 0 8px #00ffff, 0 0 16px #00bfff;
+                z-index: 1000;
+                letter-spacing: 2px;
+                font-size: 1.8rem;
+                font-weight: bold;
+                background: rgba(0, 0, 0, 0.5);
+                padding: 8px 14px;
+                border-radius: 6px;
+                border: 1px solid #00ffff;
+                box-shadow: 0 0 15px #00ffff;
+            }
+
+        .digital-time {
+            margin: 0;
+            white-space: nowrap;
+        }
+    </style>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+
+            const timeEl = document.querySelector('.digital-time');
+            timeEl.textContent = `${hours}:${minutes}:${seconds}`;
+            timeEl.style.opacity = seconds % 2 === 0 ? "1" : "0.5";
+
+            requestAnimationFrame(updateClock);
+        }
+
+        updateClock();
+    </script>
+</body>
+</html>
