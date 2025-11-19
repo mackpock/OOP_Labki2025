@@ -15,12 +15,9 @@ namespace Labka7_16._3
         {
         public string Author;   // фамилия 
         public string Title;    // название книги
-        public int Year;        // год издания/
+        public int Year;        // год издания
         }
-        //dfdf
-        //dfdfd
-        //dfdfsdfsdf
-        //qweqwewe
+        
         static void Main(string[] args)
         {
             const int Count = 10;
