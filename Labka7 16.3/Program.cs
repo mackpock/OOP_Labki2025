@@ -9,7 +9,7 @@ namespace Labka7_16._3
 {
     internal class Program
     {
-
+        //test test
 
         struct Book
         {
