@@ -9,14 +9,15 @@ namespace Labka7_16._3
 {
     internal class Program
     {
-        
 
-        struct Book
+        
+        public struct Book  
         {
-            public string author;   // фамилия 
-            public string title;    // название книги
-            public int year;        // год издания
+        public string author;   // фамилия 
+        public string title;    // название книги
+        public int year;        // год издания
         }
+        
         static void Main(string[] args)
         {
             const int COUNT = 10;
