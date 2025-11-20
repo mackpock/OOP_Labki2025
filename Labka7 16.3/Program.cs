@@ -27,7 +27,7 @@ namespace Labka7_16._3
             Book[] Books = new Book[Count];
             try
             {
-                using (FileStream fs = new FileStream("books.txt",FileMode.Open))
+                using (FileStream fs = new FileStream("meme.txt",FileMode.Open))
                 using (StreamReader reader = new StreamReader(fs))
                 {
                     for (int i = 0; i < Count; i++)
