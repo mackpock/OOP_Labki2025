@@ -15,19 +15,16 @@ namespace Labka7_16._3
         {
         public string Author;   // фамилия 
         public string Title;    // название книги
-        public int Year;        // год издания/
+        public int Year;        // год издания
         }
-        //dfdf
-        //dfdfd
-        //dfdfsdfsdf
-        //qweqwewe
+        
         static void Main(string[] args)
         {
             const int Count = 10;
             Book[] Books = new Book[Count];
             try
             {
-                using (FileStream fs = new FileStream("meme.txt",FileMode.Open))
+                using (FileStream fs = new FileStream("journals.txt",FileMode.Open))
                 using (StreamReader reader = new StreamReader(fs))
                 {
                     for (int i = 0; i < Count; i++)
